@@ -17,3 +17,5 @@ data/*.csv
 
 # Vector store data (rebuilt automatically on each run)
 docs/
+
+README.md

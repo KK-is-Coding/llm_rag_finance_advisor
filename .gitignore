@@ -1,0 +1,19 @@
+# Virtual environment — regenerate anywhere with:
+#   python -m venv .venv && pip install -r requirements.txt
+.venv/
+venv/
+env/
+
+# Python bytecode caches
+__pycache__/
+*.pyc
+
+# Secrets — NEVER commit this. It contains your real API keys.
+.env
+
+# Generated data (recreated automatically by fetch_data.py / generate_synthetic_data.py)
+data/*.csv
+!data/.gitkeep
+
+# Vector store data (rebuilt automatically on each run)
+docs/

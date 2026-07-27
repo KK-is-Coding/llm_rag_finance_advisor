@@ -1,0 +1,15 @@
+langchain
+langchain-classic
+langchain-community
+langchain-core
+langchain-text-splitters
+langchain-chroma
+langchain-huggingface
+transformers
+sentence-transformers
+chromadb
+pandas
+certifi
+newsapi-python
+python-dotenv
+huggingface_hub

@@ -54,23 +54,29 @@ def clear_collection(persist_directory, embeddings, collection_name=None):
             collection_name=collection_name,
         ).delete_collection()
     except Exception:
-        pass  # nothing existed to delete yet — fine on first run
+        pass
 
 
 def build_chroma_store(
-    documents, embeddings, persist_directory, collection_name=None
+    documents, embeddings, persist_directory=None, collection_name=None
 ):
     """
-    Embed `documents` and store them in a Chroma collection on disk.
+    Embed `documents` and store them in a Chroma collection.
+
+    If `persist_directory` is given, the collection is saved to disk
+    (use this for data that's reused across calls, like
+    investment_advisor's static CSV). If omitted, the collection is
+    kept in memory only for this process and never touches disk — use
+    this for data that's rebuilt fresh on every call anyway (like
+    economic_report's single-ticker lookups), so nothing gets written
+    that just has to be cleaned up later.
 
     Returns the Chroma vector store object, ready for
     `.similarity_search()` or `.as_retriever()`.
     """
-    kwargs = dict(
-        documents=documents,
-        embedding=embeddings,
-        persist_directory=persist_directory,
-    )
+    kwargs = dict(documents=documents, embedding=embeddings)
+    if persist_directory:
+        kwargs["persist_directory"] = persist_directory
     if collection_name:
         kwargs["collection_name"] = collection_name
 

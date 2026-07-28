@@ -1,66 +1,38 @@
 """
 main.py
 =======
-Single entry point that runs all three pipelines in order. Useful for
-smoke-testing the whole project and for seeing exactly how the files
-connect to each other end-to-end.
+Single entry point for the whole project.
 
-Data flow
----------
-Project 1 — Economic Report:
-    economic_report/fetch_data.py   --(writes CSV)-->  data/eco_ind.csv
-    economic_report/rag_pipeline.py --(reads CSV, uses shared/embeddings,
-                                        shared/llm, shared/vectorstore)-->
-                                        Chroma DB --> RetrievalQA answer
+This used to duplicate final_advisor/pipeline.py's logic by calling
+each of the three sub-pipelines separately and printing three
+disconnected answers. That duplication is exactly what let this file
+drift out of sync with the real app as it evolved (e.g. it still had
+a hardcoded question after final_advisor/pipeline.py was updated to
+collect one interactively). Now this file just delegates — there's
+exactly one place the combined-app logic lives.
 
-Project 2 — News Sentiment:
-    news_sentiment/fetch_news.py  --(returns DataFrame)-->
-    news_sentiment/pipeline.py    --(uses shared/llm, NOT a RAG chain,
-                                      just a direct prompt)--> LLM summary
+Run:  python main.py
+(identical to: python -m final_advisor.pipeline)
 
-Project 3 — Investment Advisor:
-    investment_advisor/data_prep.py   --(reads data/Finance_data.csv,
-                                          returns Documents)-->
-    investment_advisor/rag_pipeline.py --(uses shared/embeddings,
-                                           shared/llm, shared/vectorstore)-->
-                                           Chroma DB --> RetrievalQA answer
-
-Run individual pieces instead of everything with, e.g.:
+To smoke-test one piece at a time instead of the full combined flow:
     python -m economic_report.fetch_data
     python -m economic_report.rag_pipeline
     python -m news_sentiment.pipeline
     python -m investment_advisor.rag_pipeline
 """
 
-from economic_report.fetch_data import fetch_and_save
-from economic_report.rag_pipeline import run_report_query
-from news_sentiment.pipeline import run_sentiment_summary
-from investment_advisor.rag_pipeline import run_advisor_query
-
-
-def run_economic_report():
-    print("\n=== Project 1: Economic Report RAG ===")
-    fetch_and_save(ticker="MSFT", exchange="US")
-    answer = run_report_query("Microsoft(MSFT) Financial Report")
-    print(answer)
-
-
-def run_news_sentiment():
-    print("\n=== Project 2: News Sentiment Summarizer ===")
-    summary = run_sentiment_summary("Microsoft News")
-    print(summary)
-
-
-def run_investment_advisor():
-    print("\n=== Project 3: Investment Advisor RAG ===")
-    result = run_advisor_query(
-        "I'm a 34-year-old female looking to invest in mutual funds for "
-        "wealth creation over the next 1-3 years. What are my options?"
-    )
-    print(result["result"])
-
+from final_advisor.pipeline import (
+    collect_investor_profile,
+    build_investor_question,
+    collect_tickers,
+    run_final_advisory,
+)
 
 if __name__ == "__main__":
-    run_economic_report()
-    run_news_sentiment()
-    run_investment_advisor()
+    profile = collect_investor_profile()
+    investor_question = build_investor_question(profile)
+    tickers = collect_tickers()
+
+    result = run_final_advisory(investor_question, tickers, investor_profile=profile)
+    print("\n=== FINAL RECOMMENDATION ===\n")
+    print(result)

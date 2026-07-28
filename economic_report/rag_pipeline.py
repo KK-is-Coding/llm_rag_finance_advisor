@@ -1,30 +1,12 @@
-"""
-economic_report/rag_pipeline.py
-=================================
-Project 1, Step 2: load the CSV produced by fetch_data.py, embed it,
-store it in Chroma, and run a RetrievalQA chain against it to produce
-a financial report answer.
-
-This corresponds to notebook cells 11, 13, 14, 15, 17, 18.
-
-Depends on:
-    - economic_report/fetch_data.py  (must run first, produces the CSV)
-    - shared/embeddings.py
-    - shared/llm.py
-    - shared/vectorstore.py
-
-Run directly with:  python -m economic_report.rag_pipeline
-"""
-
 import os
 from langchain_community.document_loaders import CSVLoader
 from langchain_classic.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 
-from config import ECONOMIC_CSV_PATH, CHROMA_DIR_ECONOMIC
+from config import ECONOMIC_CSV_PATH
 from shared.embeddings import get_embeddings
 from shared.llm import get_llm
-from shared.vectorstore import split_documents, build_chroma_store, clear_collection
+from shared.vectorstore import split_documents, build_chroma_store
 
 REPORT_TEMPLATE = """You are a Financial Market Expert. Use the Market Economic
 Data below to build a financial report for the requested company.
@@ -41,28 +23,24 @@ def load_and_split_csv(csv_path: str = ECONOMIC_CSV_PATH):
         )
     loader = CSVLoader(csv_path)
     documents = loader.load()
-    # NOTE: chunk_size=50 (as in the original notebook) is extremely small for
-    # this data — most CSV rows will get split mid-field. Bumped to a saner
-    # default; override if you know your row sizes.
     return split_documents(documents, chunk_size=200, chunk_overlap=20)
 
 
 def build_vectorstore():
-    """Embed the split documents and persist them to Chroma."""
+    """
+    Embed the split documents into an in-memory (non-persisted) Chroma store.
+
+    This pipeline re-fetches and rebuilds from scratch for a different
+    ticker on every call — there's nothing worth persisting to disk,
+    and doing so previously left behind a growing pile of stale
+    per-run Chroma folders under docs/chroma_economic/ for no benefit.
+    """
     texts = load_and_split_csv()
     embeddings = get_embeddings()
-
-    # IMPORTANT: this pipeline is re-run for a different ticker every time
-    # (fetch_data.py overwrites eco_ind.csv each call). Without clearing the
-    # collection first, Chroma silently appends the new ticker's data to
-    # whatever was already persisted from previous tickers/runs, and the
-    # retriever can then mix up data between companies. Always clear first.
-    clear_collection(CHROMA_DIR_ECONOMIC, embeddings, collection_name="economic_data")
 
     return build_chroma_store(
         documents=texts,
         embeddings=embeddings,
-        persist_directory=CHROMA_DIR_ECONOMIC,
         collection_name="economic_data",
     )
 

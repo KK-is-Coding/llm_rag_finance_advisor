@@ -1,29 +1,3 @@
-"""
-economic_report/fetch_data.py
-==============================
-Project 1, Step 1: pull a stock quote / economic indicators from the
-Financial Modeling Prep (FMP) API, clean it up, and save it to CSV.
-
-This corresponds to notebook cells 2, 5, 7.
-
-Bugs fixed vs. the notebook:
-1. The original function signature was
-       def get_jsonparsed_data(url, api_key, exchange)
-   but it never used `url` — it silently overwrote it using a *global*
-   `ticker` variable defined outside the function. That's fragile (the
-   function only works if a same-named global happens to exist in
-   whatever scope calls it). Here `ticker` is a proper parameter.
-2. The notebook hit `/api/v3/...` — FMP retired those "legacy"
-   endpoints for anyone without a subscription that predates
-   Aug 31 2025; that's what causes the `HTTP Error 403: Forbidden`.
-   Current endpoints live under `/stable/`. Updated below.
-3. `urlopen(url, cafile=...)` is deprecated in Python 3.12+ in favor
-   of passing an `ssl.SSLContext`. Switched to `context=`.
-
-Run directly with:  python -m economic_report.fetch_data
-Output:  data/eco_ind.csv  (consumed by economic_report/rag_pipeline.py)
-"""
-
 import os
 import ssl
 import json
@@ -36,8 +10,6 @@ from config import FMP_API_KEY, ECONOMIC_CSV_PATH, DATA_DIR
 
 FMP_BASE_URL = "https://financialmodelingprep.com/stable"
 
-# Reuse one SSL context instead of re-resolving certifi's cert bundle on
-# every call (and avoids the `cafile=` deprecation warning).
 _SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 

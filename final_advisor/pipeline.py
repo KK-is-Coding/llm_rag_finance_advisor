@@ -19,18 +19,6 @@ Depends on:
     - investment_advisor/rag_pipeline.py
     - news_sentiment/pipeline.py
     - shared/llm.py
-
-Run directly with:  python -m final_advisor.pipeline
-(prompts you interactively for your profile and tickers)
-
-Or call programmatically:
-    from final_advisor.pipeline import run_final_advisory
-    run_final_advisory(
-        investor_question="...",
-        tickers=["MSFT", "AAPL"],
-        investor_profile={"age": "25", "gender": "Male", "Avenue": "...",
-                           "Purpose": "...", "Duration": "..."},
-    )
 """
 
 from economic_report.fetch_data import fetch_and_save
@@ -41,14 +29,6 @@ from shared.llm import get_llm
 
 MAX_TICKERS = 3
 
-# NOTE on the two sections below: `investor_advice` comes from a RAG lookup
-# over a CSV of OTHER, PAST investors — it's plausible-looking peer advice,
-# not facts about the current user. Earlier versions of this prompt didn't
-# separate that from what the user actually typed, and the LLM ended up
-# presenting a stranger's retrieved "Expected Returns: 20%-30%" etc. as if
-# it were the current investor's own stated profile. Splitting them into two
-# clearly-labeled, explicitly-described sections (and telling the model not
-# to blend them) fixes that.
 SYNTHESIS_TEMPLATE = """You are a financial advisor. Combine the research below into
 one clear, well-organized recommendation for the investor.
 

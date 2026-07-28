@@ -58,10 +58,9 @@ LLM_MAX_NEW_TOKENS = int(os.environ.get("LLM_MAX_NEW_TOKENS", "2048"))
 # errors that looked like failures but were really just impatience.
 LLM_TIMEOUT_SECONDS = float(os.environ.get("LLM_TIMEOUT_SECONDS", "180"))
 
-# --- Vector DB persistence locations (kept separate per pipeline on purpose —
-#     the original notebook reused the *same* Chroma collection folder for
-#     two different datasets, which silently mixes unrelated embeddings) ---
-CHROMA_DIR_ECONOMIC = os.environ.get("CHROMA_DIR_ECONOMIC", "docs/chroma_economic/")
+# --- Vector DB persistence location for investment_advisor ---
+# (economic_report intentionally does NOT persist — see
+# economic_report/rag_pipeline.py for why)
 CHROMA_DIR_ADVISOR = os.environ.get("CHROMA_DIR_ADVISOR", "docs/chroma_advisor/")
 
 # --- Data file locations ---

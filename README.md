@@ -4,8 +4,7 @@
 ![LangChain](https://img.shields.io/badge/LangChain-RAG-1C3C3C?logo=langchain&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/🤗%20Hugging%20Face-Inference-yellow)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Store-orange)
-![Status](https://img.shields.io/badge/status-active-success)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
 
 > 📈 Ask it about your money. It'll actually go check, instead of guessing.
 

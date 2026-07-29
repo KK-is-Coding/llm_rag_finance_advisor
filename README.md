@@ -249,4 +249,4 @@ python -m investment_advisor.rag_pipeline  # 👥 get peer-based advice for a ha
 
 ---
 
-<p align="center">Made with ☕ and a healthy amount of debugging.</p>
+<p align="center">Made with ☕ and a unhealthy amount of debugging.</p>

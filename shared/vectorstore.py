@@ -28,7 +28,7 @@ from langchain_chroma import Chroma
 
 
 def split_documents(documents, chunk_size=100, chunk_overlap=10):
-    """Split loaded documents into smaller chunks before embedding."""
+    """Splitting loaded documents into smaller chunks before embedding."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size, chunk_overlap=chunk_overlap
     )

@@ -14,7 +14,7 @@ _SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 
 def get_jsonparsed_data(ticker: str, api_key: str, exchange: str) -> dict:
-    """Call the FMP API for a given ticker and return parsed JSON."""
+    """Calling the FMP API for a given ticker and return parsed JSON."""
     if exchange == "NSE":
         url = f"{FMP_BASE_URL}/search-symbol?query={ticker}&exchange=NSE&apikey={api_key}"
     else:
@@ -47,17 +47,6 @@ def get_jsonparsed_data(ticker: str, api_key: str, exchange: str) -> dict:
 
 
 def preprocess_economic_data(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Convert timestamp-like columns to real datetimes.
-
-    The notebook assumed both `timestamp` and `earningsAnnouncement`
-    would always be present, which was true of the old `/api/v3/quote`
-    response. The current `/stable/quote` response only returns
-    `timestamp` — `earningsAnnouncement` now lives on FMP's separate
-    earnings-calendar endpoint, not the quote endpoint. Rather than
-    re-hardcode a column list that FMP can change again, this only
-    converts whichever of these columns actually showed up.
-    """
     df = df.copy()
     if "timestamp" in df.columns:
         df["timestamp"] = pd.to_datetime(df["timestamp"], unit="s", errors="coerce")

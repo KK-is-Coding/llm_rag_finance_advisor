@@ -58,7 +58,7 @@ never invent or restate peer data as if it belongs to the current investor."""
 
 
 # ---------------------------------------------------------------------------
-# Step 0: collect the investor's profile and tickers interactively.
+# Step 0: collecting the investor's profile and tickers interactively.
 # These questions mirror the exact fields investment_advisor/data_prep.py
 # uses to build its training documents (age, gender, Avenue, Purpose,
 # Duration) so the generated question retrieves well against that data.
@@ -85,7 +85,7 @@ def collect_investor_profile() -> dict:
 
 
 def build_investor_question(profile: dict) -> str:
-    """Turn a collected profile into the natural-language question the RAG chain expects."""
+    """Turning a collected profile into the natural-language question the RAG chain expects."""
     return (
         f"I'm a {profile['age']}-year-old {profile['gender']} looking to invest "
         f"in {profile['Avenue']} for {profile['Purpose']} over the next "
@@ -94,7 +94,7 @@ def build_investor_question(profile: dict) -> str:
 
 
 def format_profile_block(profile: dict) -> str:
-    """Render the user's own stated profile as a clean, unambiguous fact list."""
+    """Rendering the user's own stated profile as a clean, unambiguous fact list."""
     return (
         f"- Age: {profile.get('age', 'not specified')}\n"
         f"- Gender: {profile.get('gender', 'not specified')}\n"

@@ -16,7 +16,7 @@ Please present the key figures in a table."""
 
 
 def load_and_split_csv(csv_path: str = ECONOMIC_CSV_PATH):
-    """Load the economic-indicator CSV and split it into chunks."""
+    """Loading the economic-indicator CSV and split it into chunks."""
     if not os.path.exists(csv_path):
         raise FileNotFoundError(
             f"{csv_path} not found. Run `python -m economic_report.fetch_data` first."
@@ -31,7 +31,7 @@ def build_vectorstore():
     Embed the split documents into an in-memory (non-persisted) Chroma store.
 
     This pipeline re-fetches and rebuilds from scratch for a different
-    ticker on every call — there's nothing worth persisting to disk,
+    ticker on every call, there's nothing worth persisting to disk,
     and doing so previously left behind a growing pile of stale
     per-run Chroma folders under docs/chroma_economic/ for no benefit.
     """
@@ -46,7 +46,7 @@ def build_vectorstore():
 
 
 def run_report_query(question: str, vectordb=None, k: int = 2) -> str:
-    """Run the RAG chain for a given natural-language question."""
+    """Running the RAG chain for a given natural-language question."""
     vectordb = vectordb or build_vectorstore()
     retriever = vectordb.as_retriever(search_kwargs={"k": k})
 

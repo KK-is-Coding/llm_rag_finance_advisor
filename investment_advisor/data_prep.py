@@ -1,7 +1,7 @@
 """
 investment_advisor/data_prep.py
 =================================
-Project 3, Step 1: load the Kaggle "Finance_data.csv" dataset and turn
+Step 1: loading the Kaggle "Finance_data.csv" dataset and turn
 each row into a (prompt, response) pair describing an investor profile
 and the advice given to them.
 
@@ -11,9 +11,6 @@ You must download this CSV yourself and place it at the path in
 config.FINANCE_ADVISOR_CSV_PATH (data/Finance_data.csv by default) —
 it isn't fetched automatically by any API.
 
-This corresponds to notebook cells 29, 30, 32.
-
-Run directly with:  python -m investment_advisor.data_prep
 """
 
 import os
@@ -32,7 +29,7 @@ REQUIRED_COLUMNS = [
 
 
 def load_finance_data(csv_path: str = FINANCE_ADVISOR_CSV_PATH) -> list[dict]:
-    """Load the raw CSV into a list of row dicts."""
+    """Loading the raw CSV into a list of row dicts."""
     if not os.path.exists(csv_path):
         raise FileNotFoundError(
             f"{csv_path} not found. Download it from "
@@ -64,7 +61,7 @@ def load_finance_data(csv_path: str = FINANCE_ADVISOR_CSV_PATH) -> list[dict]:
 
 
 def build_prompt_response_pairs(data_fin: list[dict]) -> list[dict]:
-    """Convert each investor row into a {prompt, response} training-style pair."""
+    """Converting each investor row into a {prompt, response} training-style pair."""
     pairs = []
     for entry in data_fin:
         prompt = (
@@ -97,7 +94,7 @@ def build_prompt_response_pairs(data_fin: list[dict]) -> list[dict]:
 
 
 def build_documents(pairs: list[dict]) -> list[Document]:
-    """Turn prompt-response pairs into LangChain Document objects for embedding."""
+    """Turning prompt-response pairs into LangChain Document objects for embedding."""
     documents = []
     for entry in pairs:
         combined_text = f"Prompt: {entry['prompt']}\nResponse: {entry['response']}"

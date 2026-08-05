@@ -1,11 +1,8 @@
 """
 shared/llm.py
 =============
-One place that creates the HuggingFace Hub LLM (Falcon-7B-Instruct).
 
-The original notebook built the *same* `HuggingFaceHub(...)` object
-twice (cell 17 and cell 25) with identical arguments. Centralizing it
-here means:
+Centralizing `HuggingFaceHub(...)` object here means:
     - the HF token is validated once, with a clear error if missing
     - if you swap models later, you only change it in one place
 
@@ -46,7 +43,7 @@ _llm_instance = None
 
 
 def get_llm() -> ChatHuggingFace:
-    """Return a lazily-created, shared ChatHuggingFace LLM instance."""
+    """Returning a lazily-created, shared ChatHuggingFace LLM instance."""
     global _llm_instance
     if _llm_instance is None:
         if not HUGGINGFACEHUB_API_TOKEN:
@@ -54,8 +51,7 @@ def get_llm() -> ChatHuggingFace:
                 "HUGGINGFACEHUB_API_TOKEN is not set. Add it to your .env file "
                 "or export it in your shell before running this pipeline."
             )
-        # ChatHuggingFace reads the token from this env var internally,
-        # so we set it here rather than passing it as an argument.
+
         os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
         endpoint = HuggingFaceEndpoint(

@@ -1,13 +1,10 @@
 """
 news_sentiment/pipeline.py
 ============================
-Project 2, Step 2: turn the fetched news headlines into a single prompt
+Step 2: turning the fetched news headlines into a single prompt
 and ask the LLM to analyze sentiment/impact.
 
-This corresponds to notebook cells 23, 25, 26.
-
-IMPORTANT — this is NOT a RAG pipeline, unlike Project 1 and Project 3.
-The notebook never embeds the news articles or does a similarity
+IMPORTANT — The notebook never embeds the news articles or does a similarity
 search on them; it just concatenates every headline into one big
 prompt and sends it straight to the LLM. That's fine for a handful of
 articles but will blow past the model's context window if `page_size`
@@ -18,7 +15,6 @@ Depends on:
     - news_sentiment/fetch_news.py
     - shared/llm.py
 
-Run directly with:  python -m news_sentiment.pipeline
 """
 
 from urllib import response
@@ -61,4 +57,5 @@ def run_sentiment_summary(query: str, days_back: int = 10) -> str:
 
 if __name__ == "__main__":
     summary = run_sentiment_summary("Microsoft News")
+    # in case only if this file is run directly, not if imported as a module
     print(summary)

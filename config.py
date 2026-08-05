@@ -4,10 +4,6 @@ config.py
 Single source of truth for all settings and API keys.
 
 Every other module imports from here instead of hardcoding credentials.
-This is the #1 fix vs. the original notebook, which had three live API
-keys typed directly into code cells (FMP key, HuggingFace Hub token,
-NewsAPI key). That means anyone who opened the .ipynb file could see
-and use them.
 
 Set these as real environment variables (or put them in a local
 `.env` file — see `.env.example`) before running anything else in
@@ -25,7 +21,7 @@ except ImportError:
 
 
 def _get_required(name: str) -> str:
-    """Fetch an env var and fail loudly (not silently) if it's missing."""
+    """Fetching an env var and fail loudly (not silently) if it's missing."""
     value = os.environ.get(name)
     if not value:
         raise EnvironmentError(

@@ -3,14 +3,6 @@ main.py
 =======
 Single entry point for the whole project.
 
-This used to duplicate final_advisor/pipeline.py's logic by calling
-each of the three sub-pipelines separately and printing three
-disconnected answers. That duplication is exactly what let this file
-drift out of sync with the real app as it evolved (e.g. it still had
-a hardcoded question after final_advisor/pipeline.py was updated to
-collect one interactively). Now this file just delegates — there's
-exactly one place the combined-app logic lives.
-
 Run:  python main.py
 (identical to: python -m final_advisor.pipeline)
 

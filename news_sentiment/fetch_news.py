@@ -1,12 +1,9 @@
 """
 news_sentiment/fetch_news.py
 ==============================
-Project 2, Step 1: pull recent news articles from NewsAPI about a
+Step 1: pulling recent news articles from NewsAPI about a
 company/topic and clean the result down to (author, title) pairs.
 
-This corresponds to notebook cell 21.
-
-Run directly with:  python -m news_sentiment.fetch_news
 """
 
 import pandas as pd
@@ -25,7 +22,7 @@ def fetch_news(
     page_size: int = 30,
     api_key: str = None,
 ) -> pd.DataFrame:
-    """Fetch articles from NewsAPI matching `query` in the given date range."""
+    """Fetching articles from NewsAPI matching `query` in the given date range."""
     api_key = api_key or NEWSAPI_API_KEY
     if not api_key:
         raise EnvironmentError("NEWSAPI_API_KEY is not set. See .env.example.")
@@ -64,8 +61,6 @@ def fetch_and_preprocess(query: str, days_back: int = 10) -> pd.DataFrame:
         print("No articles found for this query/date range.")
         return raw_df
 
-    # NOTE: original notebook did `df.drop("source", axis=1)` unconditionally,
-    # which raises a KeyError if NewsAPI ever omits that column. Guarded here.
     if "source" in raw_df.columns:
         raw_df = raw_df.drop("source", axis=1)
 
@@ -73,5 +68,5 @@ def fetch_and_preprocess(query: str, days_back: int = 10) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    df = fetch_and_preprocess("Microsoft News")
+    df = fetch_and_preprocess("Microsoft News") # in case if onlyif this file is run directly, not if imported as a module
     print(df.head())
